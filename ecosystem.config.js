@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
     name: 'todo-app',
-    script: './dist/index.js',
+    script: './server/production.js',
     instances: 1,
     exec_mode: 'fork',
     env: {
