@@ -2,8 +2,8 @@ import express from "express";
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import ws from "ws";
-import { tasks } from "./shared/schema.js";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
+import { pgTable, text, varchar, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import path from "path";
@@ -13,6 +13,15 @@ import { createServer } from "http";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Database schema definitions (inline to avoid import issues)
+const tasks = pgTable("tasks", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  status: varchar("status", { length: 20 }).notNull().default("pending"),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+});
 
 // Database setup
 neonConfig.webSocketConstructor = ws;
