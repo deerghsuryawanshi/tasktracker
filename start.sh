@@ -17,4 +17,4 @@ npm run db:push
 
 # Start the application
 echo "Starting the application..."
-node server/production.js
+node dist/index.js
